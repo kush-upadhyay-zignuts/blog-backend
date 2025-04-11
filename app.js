@@ -18,7 +18,7 @@ require('dotenv').config();
 
 
 app.use(cors({
-    origin: "http://localhost:5173", // Allow requests only from React app
+    origin: "https://kushblogverse.netlify.app", // Allow requests only from React app
     methods: "GET,POST,PUT,DELETE",
     credentials: true
 }));
