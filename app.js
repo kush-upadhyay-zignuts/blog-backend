@@ -44,7 +44,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-main(process.env.URL)
+main(URL)
 .then(()=>{
     console.log("connected successfully")
 })
