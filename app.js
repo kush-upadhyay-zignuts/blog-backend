@@ -14,6 +14,7 @@ var {setUser , getUser} = require("./service/auth.js");
 var {checkAuthentication} = require("./middlewares/auth.js");
 const multer  = require('multer');
 const category = require("./category.js");
+require('dotenv').config();
 
 
 app.use(cors({
