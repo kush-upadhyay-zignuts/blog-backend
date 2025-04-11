@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 
-let URL ='mongodb://127.0.0.1:27017/blogs';
+// let URL ='mongodb://127.0.0.1:27017/blogs';
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -44,7 +44,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-main(URL)
+main(process.env.URL)
 .then(()=>{
     console.log("connected successfully")
 })
