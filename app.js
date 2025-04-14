@@ -198,6 +198,7 @@ app.post("/api/admin/blogs/new",upload.single("Image"),async (req,res)=>{
     let {title, category, description } = req.body;
     let filepath = "/photos/" + req.file.filename ;
     let publishDate =  Date.now();
+        let category1 = await CategoryModel.create({title:category ,publishDate:publishDate });
     let blog = await BlogModel.create({title:title ,category:category ,description:description , imgUrl:filepath ,publishDate:publishDate});
    
     res.status(201).json({ message: "Blog created successfully", blog });
