@@ -15,10 +15,12 @@ var {checkAuthentication} = require("./middlewares/auth.js");
 const multer  = require('multer');
 const category = require("./category.js");
 require('dotenv').config();
+const { storage } = require('./cloudinary.js');
 
 
 app.use(cors({
     origin: "https://kushblogverse.netlify.app", // Allow requests only from React app
+    // origin: "http://localhost:5173/",
     methods: "GET,POST,PUT,DELETE",
     credentials: true
 }));
@@ -33,16 +35,18 @@ app.use(express.json());
 
 // let URL ='mongodb://127.0.0.1:27017/blogs';
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      return cb(null, './public/photos');
-    },
-    filename: function (req, file, cb) {
-      return cb(null, `${Date.now()}-${file.originalname}`);
-    }
-});
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       return cb(null, './public/photos');
+//     },
+//     filename: function (req, file, cb) {
+//       return cb(null, `${Date.now()}-${file.originalname}`);
+//     }
+// });
   
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
+
+const upload = multer({ storage });
 
 
 main(process.env.URL)
@@ -126,7 +130,8 @@ app.put("/user/:id/edit",upload.single("Image"),async (req,res)=>{
     let {title, category, description} = req.body;
   
     if(req.file){
-        let filepath = "/photos/" + req.file.filename ;      
+        // let filepath = "/photos/" + req.file.filename ;     
+        let filepath = req.file.path;  
         let blog = await BlogModel.findOneAndUpdate({title: name},{title:title ,category:category ,description:description , imgUrl:filepath} , {runValidators : true});
     }
     else{      
@@ -141,7 +146,8 @@ app.put("/api/admin/:id/edit",upload.single("Image"),async (req,res)=>{
   
     // let category1 = await CategoryModel.findOneAndUpdate({title: id},{title:category } , {runValidators : true}); 
     if(req.file){
-        let filepath = "/photos/" + req.file.filename ;      
+        // let filepath = "/photos/" + req.file.filename ;      
+        let filepath = req.file.path; 
         let blog = await BlogModel.findOneAndUpdate({title: name},{title:title ,category:category ,description:description , imgUrl:filepath} , {runValidators : true});
     }
     else{      
@@ -185,7 +191,8 @@ app.get("/api/admin/blogs/new",async (req,res)=>{
 
 app.post("/user/blogs/new",upload.single("Image"),async (req,res)=>{
     let {title, category, description } = req.body;
-    let filepath = "/photos/" + req.file.filename ;
+    // let filepath = "/photos/" + req.file.filename ;
+    let filepath = req.file.path; 
     let publishDate =  Date.now();
     let category1 = await CategoryModel.create({title:category ,publishDate:publishDate });
     let blog = await BlogModel.create({title:title ,category:category ,description:description , imgUrl:filepath ,publishDate:publishDate});
@@ -196,9 +203,10 @@ app.post("/user/blogs/new",upload.single("Image"),async (req,res)=>{
 app.post("/api/admin/blogs/new",upload.single("Image"),async (req,res)=>{
     try{ 
     let {title, category, description } = req.body;
-    let filepath = "/photos/" + req.file.filename ;
+    // let filepath = "/photos/" + req.file.filename ;
+    let filepath = req.file.path; 
     let publishDate =  Date.now();
-        let category1 = await CategoryModel.create({title:category ,publishDate:publishDate });
+        // let category1 = await CategoryModel.create({title:category ,publishDate:publishDate });
     let blog = await BlogModel.create({title:title ,category:category ,description:description , imgUrl:filepath ,publishDate:publishDate});
    
     res.status(201).json({ message: "Blog created successfully", blog });
