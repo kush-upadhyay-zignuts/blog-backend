@@ -19,7 +19,7 @@ const { storage } = require('./cloudinary.js');
 
 
 app.use(cors({
-    origin: "https://kushblogverse.netlify.app", // Allow requests only from React app
+    origin: "https://storyhavenn.netlify.app", // Allow requests only from React app
     // origin: "http://localhost:5173/",
     methods: "GET,POST,PUT,DELETE",
     credentials: true
