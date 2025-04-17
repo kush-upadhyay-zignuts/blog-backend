@@ -55,14 +55,37 @@ main(process.env.URL)
 })
 .catch(err => console.log(err));
 
-app.get("/api/blogs",async (req,res)=>{
-    let blogs = await BlogModel.find({}).sort({ publishDate: -1 });
-    let categories = await CategoryModel.find({}).sort({ publishDate: -1 });   
-    // console.log(blogs[4].description);
-    res.json({blogs ,categories});
-    // res.render("home.ejs" , {blogs , name: ""});
+// app.get("/api/blogs",async (req,res)=>{
+//     let blogs = await BlogModel.find({}).sort({ publishDate: -1 });
+//     let categories = await CategoryModel.find({}).sort({ publishDate: -1 });   
+//     // console.log(blogs[4].description);
+//     res.json({blogs ,categories});
+//     // res.render("home.ejs" , {blogs , name: ""});
     
-});
+// });
+app.get("/api/blogs", async (req, res) => {
+    const page = parseInt(req.query.page) || 1; // default to page 1
+    const limit = parseInt(req.query.limit) || 5; // default to 5 blogs per page
+    const skip = (page - 1) * limit;
+  
+    try {
+      const blogs = await BlogModel.find({})
+        .sort({ publishDate: -1 })
+        .skip(skip)
+        .limit(limit);
+  
+      const totalBlogs = await BlogModel.countDocuments();
+      const hasMore = skip + blogs.length < totalBlogs;
+  
+      const categories = await CategoryModel.find({}).sort({ publishDate: -1 });
+  
+      res.json({ blogs, categories, hasMore });
+    } catch (error) {
+      console.error("Error fetching paginated blogs:", error);
+      res.status(500).json({ message: "Server error while fetching blogs." });
+    }
+  });
+  
 
 app.get("/",async (req,res)=>{
   
