@@ -85,6 +85,20 @@ app.get("/api/blogs", async (req, res) => {
       res.status(500).json({ message: "Server error while fetching blogs." });
     }
   });
+
+  app.get("/api/blogs/category", async (req, res) => {
+
+    try {
+      const blogs = await BlogModel.find({})
+      const categories = await CategoryModel.find({})
+  
+      res.json({ blogs, categories, hasMore });
+    } catch (error) {
+      console.error("something is wrong", error);
+      res.status(500).json({ message: "Server error while fetching blogs." });
+    }
+  });
+
   
 
 app.get("/",async (req,res)=>{
