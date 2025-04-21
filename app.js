@@ -92,7 +92,7 @@ app.get("/api/blogs", async (req, res) => {
       const blogs = await BlogModel.find({})
       const categories = await CategoryModel.find({})
   
-      res.json({ blogs, categories, hasMore });
+      res.json({ blogs, categories });
     } catch (error) {
       console.error("something is wrong", error);
       res.status(500).json({ message: "Server error while fetching blogs." });
