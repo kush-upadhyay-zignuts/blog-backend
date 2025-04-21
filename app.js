@@ -89,7 +89,7 @@ app.get("/api/blogs", async (req, res) => {
   app.get("/api/blogs/category", async (req, res) => {
 
     try {
-      const blogs = await BlogModel.find({})
+      const blogs = await BlogModel.find({}).sort({ publishDate: -1 });
       const categories = await CategoryModel.find({})
   
       res.json({ blogs, categories });
